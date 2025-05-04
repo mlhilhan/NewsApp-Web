@@ -1,40 +1,131 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/pages/api-reference/create-next-app).
+# Haber Uygulaması - Frontend
 
-## Getting Started
+Bu proje, modern haber portalı uygulamasının frontend kısmıdır. Next.js, TypeScript ve TailwindCSS kullanılarak geliştirilmiştir.
 
-First, run the development server:
+## Özellikler
 
+- 📱 Responsive tasarım (hem mobil hem masaüstü için uyumlu)
+- 🔐 JWT tabanlı kimlik doğrulama sistemi
+- 📰 Haber listeleme, filtreleme ve arama
+- 🗂️ Kategori bazlı filtreleme
+- 💬 Yorum sistemi
+- 👍 Beğeni ve reaksiyon sistemi
+- 🌙 Kullanıcı profil yönetimi
+
+## Teknolojiler
+
+- **Next.js**: React framework'ü
+- **TypeScript**: Tip güvenliği için
+- **TailwindCSS**: Stil ve UI bileşenleri için
+- **React Hook Form**: Form yönetimi için
+- **Zod**: Form validasyonu için
+- **Axios**: API istekleri için
+- **Day.js**: Tarih formatlama için
+- **React Icons**: İkonlar için
+- **React Toastify**: Bildirimler için
+
+## Kurulum
+
+### Gereksinimler
+
+- Node.js (v14 veya üzeri)
+- npm veya yarn
+
+### Adımlar
+
+1. Depoyu klonlayın:
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+git clone https://github.com/kullaniciadi/haber-frontend.git
+cd haber-frontend
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+2. Bağımlılıkları yükleyin:
+```bash
+npm install
+# veya
+yarn install
+```
 
-You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
+3. Geliştirme ortamında çalıştırın:
+```bash
+npm run dev
+# veya
+yarn dev
+```
 
-[API routes](https://nextjs.org/docs/pages/building-your-application/routing/api-routes) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
+4. Tarayıcıda açın:
+```
+http://localhost:3000
+```
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/pages/building-your-application/routing/api-routes) instead of React pages.
+## Yapılandırma
 
-This project uses [`next/font`](https://nextjs.org/docs/pages/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Proje kök dizininde `.env.local` dosyası oluşturun ve aşağıdaki değişkenleri ayarlayın:
 
-## Learn More
+```env
+NEXT_PUBLIC_API_URL=http://localhost:3000/api
+```
 
-To learn more about Next.js, take a look at the following resources:
+## Proje Yapısı
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn-pages-router) - an interactive Next.js tutorial.
+```
+/src
+  /components        # Yeniden kullanılabilir bileşenler
+    /layout          # Layout bileşenleri (Header, Footer, Sidebar)
+    /news            # Haber ile ilgili bileşenler
+    /comments        # Yorum bileşenleri
+    /ui              # Genel UI bileşenleri
+  /contexts          # Context API ile durum yönetimi
+  /hooks             # Özel React hooks
+  /pages             # Next.js sayfaları
+  /services          # API servisleri
+  /styles            # Global stiller
+  /types             # TypeScript tipleri
+  /utils             # Yardımcı fonksiyonlar
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Sayfalar
 
-## Deploy on Vercel
+- `/` - Ana sayfa
+- `/news/[id]` - Haber detay sayfası
+- `/category/[slug]` - Kategori haberleri sayfası
+- `/search` - Arama sonuçları sayfası
+- `/auth/login` - Giriş sayfası
+- `/auth/register` - Kayıt sayfası
+- `/profile` - Kullanıcı profil sayfası
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## API Entegrasyonu
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/pages/building-your-application/deploying) for more details.
+Frontend, backend API'si ile iletişim kurmak için `apiClient.ts` servisini kullanır. Tüm API istekleri bu servis üzerinden yapılır.
+
+```typescript
+// Örnek API isteği
+const response = await apiClient.get('/news');
+```
+
+## Deployment
+
+Projeyi üretim ortamına deploy etmek için:
+
+```bash
+npm run build
+npm run start
+```
+
+## Katkıda Bulunma
+
+1. Fork yapın
+2. Feature branch oluşturun (`git checkout -b feature/amazing-feature`)
+3. Commit yapın (`git commit -m 'Add amazing feature'`)
+4. Push yapın (`git push origin feature/amazing-feature`)
+5. Pull Request açın
+
+## Lisans
+
+Bu proje MIT lisansı altında lisanslanmıştır.
+
+## İletişim
+
+Proje Sahibi - [@github_handle](https://github.com/github_handle)
+
+Proje Linki: [https://github.com/github_handle/haber-frontend](https://github.com/github_handle/haber-frontend)
