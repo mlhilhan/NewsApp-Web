@@ -13,7 +13,7 @@ const Sidebar: React.FC = () => {
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const response = await apiClient.get("/news/categories");
+        const response = await apiClient.get("/categories");
         if (response.data.success) {
           setCategories(response.data.data);
         }

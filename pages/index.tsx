@@ -144,7 +144,7 @@ export const getServerSideProps: GetServerSideProps = async () => {
           !latestResponse.success ||
           !popularResponse.success
             ? "Haberler yüklenirken bir hata oluştu"
-            : undefined,
+            : null,
       },
     };
   } catch (error) {

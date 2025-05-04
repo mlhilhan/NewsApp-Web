@@ -101,7 +101,7 @@ const newsService = {
   async getAllCategories(): Promise<ApiResponse<Category[]>> {
     try {
       const response = await apiClient.get<ApiResponse<Category[]>>(
-        "/news/categories"
+        "/categories"
       );
       return response.data;
     } catch (error: any) {
