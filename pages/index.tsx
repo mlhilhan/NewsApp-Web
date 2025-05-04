@@ -1,115 +1,161 @@
-import Image from "next/image";
-import { Geist, Geist_Mono } from "next/font/google";
+import { useState, useEffect } from "react";
+import { GetServerSideProps } from "next";
+import Head from "next/head";
+import { News } from "@/src/types";
+import newsService from "@/src/services/newsService";
+import NewsCard from "@/src/components/news/NewsCard";
+import NewsList from "@/src/components/news/NewsList";
+import { FiTrendingUp, FiClock } from "react-icons/fi";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
+interface HomeProps {
+  featuredNews: News[];
+  latestNews: News[];
+  popularNews: News[];
+  error?: string;
+}
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
+export default function Home({
+  featuredNews,
+  latestNews,
+  popularNews,
+  error,
+}: HomeProps) {
+  const [isLoading, setIsLoading] = useState(false);
 
-export default function Home() {
   return (
-    <div
-      className={`${geistSans.className} ${geistMono.className} grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]`}
-    >
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
+    <>
+      <Head>
+        <title>Haber Uygulaması - Ana Sayfa</title>
+        <meta
+          name="description"
+          content="En güncel haberler, son dakika gelişmeleri ve daha fazlası"
         />
-        <ol className="list-inside list-decimal text-sm/6 text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-[family-name:var(--font-geist-mono)] font-semibold">
-              pages/index.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link rel="icon" href="/favicon.ico" />
+      </Head>
+
+      {error ? (
+        <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-8 rounded-lg text-center">
+          <h2 className="text-xl font-semibold mb-2">Bir hata oluştu</h2>
+          <p>{error}</p>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
+      ) : (
+        <div className="space-y-10">
+          {/* Öne Çıkan Haberler */}
+          {featuredNews.length > 0 && (
+            <section>
+              <h2 className="text-2xl font-bold text-gray-800 mb-6">
+                Öne Çıkan Haberler
+              </h2>
+
+              <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                {/* Ana Öne Çıkan Haber */}
+                <div className="lg:col-span-2">
+                  <NewsCard news={featuredNews[0]} variant="featured" />
+                </div>
+
+                {/* Diğer Öne Çıkan Haberler */}
+                <div className="flex flex-col space-y-6">
+                  {featuredNews.slice(1, 3).map((news) => (
+                    <NewsCard key={news.id} news={news} />
+                  ))}
+                </div>
+              </div>
+            </section>
+          )}
+
+          {/* Son Haberler */}
+          {latestNews.length > 0 && (
+            <section>
+              <div className="flex items-center justify-between mb-6">
+                <h2 className="text-2xl font-bold text-gray-800 flex items-center">
+                  <FiClock className="mr-2" />
+                  Son Haberler
+                </h2>
+                <a
+                  href="/latest"
+                  className="text-blue-600 hover:text-blue-800 font-medium"
+                >
+                  Tümünü Gör →
+                </a>
+              </div>
+
+              <NewsList news={latestNews} layout="grid" perRow={3} />
+            </section>
+          )}
+
+          {/* Popüler Haberler */}
+          {popularNews.length > 0 && (
+            <section>
+              <div className="flex items-center justify-between mb-6">
+                <h2 className="text-2xl font-bold text-gray-800 flex items-center">
+                  <FiTrendingUp className="mr-2" />
+                  Popüler Haberler
+                </h2>
+                <a
+                  href="/popular"
+                  className="text-blue-600 hover:text-blue-800 font-medium"
+                >
+                  Tümünü Gör →
+                </a>
+              </div>
+
+              <NewsList news={popularNews} layout="grid" perRow={4} />
+            </section>
+          )}
+        </div>
+      )}
+    </>
   );
 }
+
+export const getServerSideProps: GetServerSideProps = async () => {
+  try {
+    // Öne çıkan haberleri getir
+    const featuredResponse = await newsService.getAllNews({
+      limit: 5,
+      sort: "publishedAt",
+      order: "DESC",
+    });
+
+    // Son haberleri getir
+    const latestResponse = await newsService.getAllNews({
+      limit: 6,
+      sort: "publishedAt",
+      order: "DESC",
+    });
+
+    // Popüler haberleri getir (simülasyon için son eklenenlerden)
+    const popularResponse = await newsService.getAllNews({
+      limit: 8,
+      sort: "publishedAt",
+      order: "DESC",
+    });
+
+    return {
+      props: {
+        featuredNews: featuredResponse.success
+          ? featuredResponse.data || []
+          : [],
+        latestNews: latestResponse.success ? latestResponse.data || [] : [],
+        popularNews: popularResponse.success ? popularResponse.data || [] : [],
+        error:
+          !featuredResponse.success ||
+          !latestResponse.success ||
+          !popularResponse.success
+            ? "Haberler yüklenirken bir hata oluştu"
+            : undefined,
+      },
+    };
+  } catch (error) {
+    console.error("Ana sayfa veri getirme hatası:", error);
+    return {
+      props: {
+        featuredNews: [],
+        latestNews: [],
+        popularNews: [],
+        error: "Haberler yüklenirken bir hata oluştu",
+      },
+    };
+  }
+};
