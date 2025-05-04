@@ -1,123 +1,117 @@
-# Haber Uygulaması - Frontend
+# News Application - Web
 
-Bu proje, modern haber portalı uygulamasının frontend kısmıdır. Next.js, TypeScript ve TailwindCSS kullanılarak geliştirilmiştir.
+This project is the frontend part of a modern news portal application. It is developed using Next.js, TypeScript, and TailwindCSS.
 
-## Özellikler
+## Features
 
-- 📱 Responsive tasarım (hem mobil hem masaüstü için uyumlu)
-- 🔐 JWT tabanlı kimlik doğrulama sistemi
-- 📰 Haber listeleme, filtreleme ve arama
-- 🗂️ Kategori bazlı filtreleme
-- 💬 Yorum sistemi
-- 👍 Beğeni ve reaksiyon sistemi
-- 🌙 Kullanıcı profil yönetimi
+- 📱 Responsive design (compatible with both mobile and desktop)
+- 🔐 JWT-based authentication system
+- 📰 News listing, filtering, and searching
+- 🗂️ Category-based filtering
+- 💬 Comment system
+- 👍 Like and reaction system
+- 🌙 User profile management
 
-## Teknolojiler
+## Technologies
 
-- **Next.js**: React framework'ü
-- **TypeScript**: Tip güvenliği için
-- **TailwindCSS**: Stil ve UI bileşenleri için
-- **React Hook Form**: Form yönetimi için
-- **Zod**: Form validasyonu için
-- **Axios**: API istekleri için
-- **Day.js**: Tarih formatlama için
-- **React Icons**: İkonlar için
-- **React Toastify**: Bildirimler için
+- **Next.js**: React framework
+- **TypeScript**: For type safety
+- **TailwindCSS**: For styling and UI components
+- **React Hook Form**: For form management
+- **Zod**: For form validation
+- **Axios**: For API requests
+- **Day.js**: For date formatting
+- **React Icons**: For icons
+- **React Toastify**: For notifications
 
-## Kurulum
+## Installation
 
-### Gereksinimler
+### Requirements
 
-- Node.js (v14 veya üzeri)
-- npm veya yarn
+- Node.js (v14 or higher)
+- npm or yarn
 
-### Adımlar
+### Steps
 
-1. Depoyu klonlayın:
+1. Clone the repository:
 ```bash
-git clone https://github.com/kullaniciadi/haber-frontend.git
-cd haber-frontend
+git clone https://github.com/yourusername/news-frontend.git
+cd news-frontend
 ```
 
-2. Bağımlılıkları yükleyin:
+2. Install dependencies:
 ```bash
 npm install
-# veya
+# or
 yarn install
 ```
 
-3. Geliştirme ortamında çalıştırın:
+3. Run in development mode:
 ```bash
 npm run dev
-# veya
+# or
 yarn dev
 ```
 
-4. Tarayıcıda açın:
+4. Open in browser:
 ```
 http://localhost:3000
 ```
 
-## Yapılandırma
+## Configuration
 
-Proje kök dizininde `.env.local` dosyası oluşturun ve aşağıdaki değişkenleri ayarlayın:
+Create a `.env.local` file in the project root directory and set the following variables:
 
 ```env
 NEXT_PUBLIC_API_URL=http://localhost:3000/api
 ```
 
-## Proje Yapısı
+## Project Structure
 
 ```
 /src
-  /components        # Yeniden kullanılabilir bileşenler
-    /layout          # Layout bileşenleri (Header, Footer, Sidebar)
-    /news            # Haber ile ilgili bileşenler
-    /comments        # Yorum bileşenleri
-    /ui              # Genel UI bileşenleri
-  /contexts          # Context API ile durum yönetimi
-  /hooks             # Özel React hooks
-  /pages             # Next.js sayfaları
-  /services          # API servisleri
-  /styles            # Global stiller
-  /types             # TypeScript tipleri
-  /utils             # Yardımcı fonksiyonlar
+  /components        # Reusable components
+    /layout          # Layout components (Header, Footer, Sidebar)
+    /news            # News-related components
+    /comments        # Comment components
+    /ui              # General UI components
+  /contexts          # State management with Context API
+  /hooks             # Custom React hooks
+  /pages             # Next.js pages
+  /services          # API services
+  /styles            # Global styles
+  /types             # TypeScript types
+  /utils             # Helper functions
 ```
 
-## Sayfalar
+## Pages
 
-- `/` - Ana sayfa
-- `/news/[id]` - Haber detay sayfası
-- `/category/[slug]` - Kategori haberleri sayfası
-- `/search` - Arama sonuçları sayfası
-- `/auth/login` - Giriş sayfası
-- `/auth/register` - Kayıt sayfası
-- `/profile` - Kullanıcı profil sayfası
+- `/` - Home page
+- `/news/[id]` - News detail page
+- `/category/[slug]` - Category news page
+- `/search` - Search results page
+- `/auth/login` - Login page
+- `/auth/register` - Registration page
+- `/profile` - User profile page
 
-## API Entegrasyonu
+## API Integration
 
-Frontend, backend API'si ile iletişim kurmak için `apiClient.ts` servisini kullanır. Tüm API istekleri bu servis üzerinden yapılır.
+The frontend uses the `apiClient.ts` service to communicate with the backend API. All API requests are made through this service.
 
 ```typescript
-// Örnek API isteği
+// Example API request
 const response = await apiClient.get('/news');
 ```
 
 ## Deployment
 
-Projeyi üretim ortamına deploy etmek için:
+To deploy the project to production:
 
 ```bash
 npm run build
 npm run start
 ```
 
-## Lisans
+## License
 
-Bu proje MIT lisansı altında lisanslanmıştır.
-
-## İletişim
-
-Proje Sahibi - [@github_handle](https://github.com/github_handle)
-
-Proje Linki: [https://github.com/github_handle/haber-frontend](https://github.com/github_handle/haber-frontend)
+This project is licensed under the MIT License.
