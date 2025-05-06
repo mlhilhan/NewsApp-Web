@@ -14,6 +14,7 @@ import {
 import dayjs from "dayjs";
 import "dayjs/locale/tr";
 import relativeTime from "dayjs/plugin/relativeTime";
+import { formatRelativeTime } from "@/src/utils/date";
 
 // dayjs yapılandırması
 dayjs.extend(relativeTime);
@@ -59,7 +60,8 @@ const NewsCard: React.FC<NewsCardProps> = ({
   };
 
   // Yayınlanma tarihini formatla
-  const formattedDate = publishedAt ? dayjs(publishedAt).fromNow() : "";
+  //const formattedDate = publishedAt ? dayjs(publishedAt).fromNow() : "";
+  const formattedDate = formatRelativeTime(publishedAt);
 
   // Kaydet işlemi
   const handleSave = (e: React.MouseEvent) => {

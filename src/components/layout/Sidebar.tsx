@@ -1,4 +1,3 @@
-// src/components/layout/Sidebar.tsx
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -45,7 +44,6 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, toggleSidebar }) => {
     fetchCategories();
   }, []);
 
-  // Mobil görünümde Sidebar açıkken ve rota değiştiğinde Sidebar'ı kapat
   useEffect(() => {
     if (isOpen) {
       router.events.on("routeChangeStart", toggleSidebar);
@@ -57,12 +55,15 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, toggleSidebar }) => {
   }, [isOpen, router.events, toggleSidebar]);
 
   const isActive = (path: string): boolean => {
-    return router.pathname === path || router.asPath.startsWith(path);
+    if (path === "/") {
+      return router.pathname === "/";
+    }
+
+    return router.pathname.startsWith(path) && path !== "/";
   };
 
   return (
     <>
-      {/* Mobil overlay */}
       {isOpen && (
         <div
           className="fixed inset-0 bg-black bg-opacity-50 z-40 md:hidden"
@@ -70,14 +71,12 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, toggleSidebar }) => {
         ></div>
       )}
 
-      {/* Sidebar */}
       <aside
         className={`fixed top-0 left-0 z-50 h-screen bg-white dark:bg-gray-900 w-72 shadow-xl transform transition-transform duration-300 md:sticky md:transform-none md:shadow-none md:z-0 ${
           isOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"
         }`}
       >
         <div className="h-full flex flex-col overflow-hidden">
-          {/* Sidebar Header (Mobil için) */}
           <div className="flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-800 md:hidden">
             <Link
               href="/"
@@ -100,7 +99,6 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, toggleSidebar }) => {
             </button>
           </div>
 
-          {/* Sidebar Content */}
           <div className="flex-1 py-6 px-3 overflow-y-auto">
             <nav className="space-y-1">
               <Link
@@ -116,9 +114,9 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, toggleSidebar }) => {
               </Link>
 
               <Link
-                href="/latest"
+                href="/breaking-news"
                 className={`flex items-center px-4 py-2.5 rounded-xl ${
-                  isActive("/latest")
+                  isActive("/breaking-news")
                     ? "bg-blue-100 text-blue-700 dark:bg-blue-900/40 dark:text-blue-400"
                     : "text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800"
                 } transition`}
@@ -139,7 +137,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, toggleSidebar }) => {
                 Popüler
               </Link>
 
-              <Link
+              {/* <Link
                 href="/categories"
                 className={`flex items-center px-4 py-2.5 rounded-xl ${
                   isActive("/categories")
@@ -149,7 +147,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, toggleSidebar }) => {
               >
                 <FiCompass className="mr-3" size={20} />
                 Keşfet
-              </Link>
+              </Link> */}
 
               <Link
                 href="/saved"
@@ -200,7 +198,6 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, toggleSidebar }) => {
             </div>
           </div>
 
-          {/* Sidebar Footer */}
           <div className="p-4 border-t border-gray-200 dark:border-gray-800">
             <div className="bg-blue-50 dark:bg-blue-900/30 rounded-xl p-4">
               <h4 className="font-medium text-blue-700 dark:text-blue-400 mb-2">
