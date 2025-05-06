@@ -1,7 +1,8 @@
+// src/components/news/NewsList.tsx
 import React from "react";
 import NewsCard from "./NewsCard";
 import { News } from "@/src/types";
-import { FiAlertCircle } from "react-icons/fi";
+import { FiAlertCircle, FiRefreshCw } from "react-icons/fi";
 
 interface NewsListProps {
   news: News[];
@@ -10,6 +11,9 @@ interface NewsListProps {
   emptyMessage?: string;
   layout?: "grid" | "list";
   perRow?: 2 | 3 | 4;
+  showSaveButtons?: boolean;
+  savedNewsIds?: number[];
+  onSaveToggle?: (id: number) => void;
 }
 
 const NewsList: React.FC<NewsListProps> = ({
@@ -19,19 +23,27 @@ const NewsList: React.FC<NewsListProps> = ({
   emptyMessage = "Gösterilecek haber bulunamadı.",
   layout = "grid",
   perRow = 3,
+  showSaveButtons = false,
+  savedNewsIds = [],
+  onSaveToggle,
 }) => {
   // Satır başına kart sayısına göre grid sınıfı
   const gridColsClass = {
-    2: "sm:grid-cols-1 md:grid-cols-2",
-    3: "sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3",
-    4: "sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4",
+    2: "sm:grid-cols-2",
+    3: "sm:grid-cols-2 lg:grid-cols-3",
+    4: "sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4",
   }[perRow];
 
   // Yükleniyor durumu
   if (loading) {
     return (
       <div className="flex justify-center items-center py-16">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+        <div className="flex flex-col items-center">
+          <div className="h-14 w-14 rounded-full border-4 border-blue-200 dark:border-blue-800 border-t-blue-600 animate-spin"></div>
+          <p className="mt-4 text-gray-600 dark:text-gray-400">
+            Haberler yükleniyor...
+          </p>
+        </div>
       </div>
     );
   }
@@ -39,12 +51,18 @@ const NewsList: React.FC<NewsListProps> = ({
   // Hata durumu
   if (error) {
     return (
-      <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-8 rounded-lg flex flex-col items-center justify-center text-center">
+      <div className="bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-800 text-red-700 dark:text-red-300 px-6 py-8 rounded-xl flex flex-col items-center justify-center text-center">
         <FiAlertCircle size={40} className="mb-4" />
         <h3 className="text-lg font-semibold mb-2">
           Haberler yüklenirken bir hata oluştu
         </h3>
-        <p>{error}</p>
+        <p className="mb-4">{error}</p>
+        <button
+          onClick={() => window.location.reload()}
+          className="flex items-center bg-red-600 hover:bg-red-700 dark:bg-red-800 dark:hover:bg-red-700 text-white px-6 py-2 rounded-lg transition"
+        >
+          <FiRefreshCw className="mr-2" /> Tekrar Dene
+        </button>
       </div>
     );
   }
@@ -52,9 +70,9 @@ const NewsList: React.FC<NewsListProps> = ({
   // Boş durum
   if (news.length === 0) {
     return (
-      <div className="bg-gray-50 border border-gray-200 text-gray-700 px-4 py-12 rounded-lg flex flex-col items-center justify-center text-center">
+      <div className="bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-300 px-6 py-12 rounded-xl flex flex-col items-center justify-center text-center">
         <svg
-          className="w-16 h-16 text-gray-400 mb-4"
+          className="w-16 h-16 text-gray-400 dark:text-gray-600 mb-4"
           fill="none"
           stroke="currentColor"
           viewBox="0 0 24 24"
@@ -75,27 +93,16 @@ const NewsList: React.FC<NewsListProps> = ({
   // Liste görünümü
   if (layout === "list") {
     return (
-      <div className="space-y-4">
+      <div className="flex flex-col space-y-6">
         {news.map((item) => (
-          <div
+          <NewsCard
             key={item.id}
-            className="bg-white rounded-lg shadow-md overflow-hidden"
-          >
-            <div className="flex flex-col md:flex-row">
-              {item.imageUrl && (
-                <div className="md:w-1/3 h-48 md:h-auto relative">
-                  <img
-                    src={item.imageUrl}
-                    alt={item.title}
-                    className="w-full h-full object-cover"
-                  />
-                </div>
-              )}
-              <div className="p-5 md:w-2/3">
-                <NewsCard news={item} variant="default" />
-              </div>
-            </div>
-          </div>
+            news={item}
+            variant="horizontal"
+            showSaveButton={showSaveButtons}
+            isSaved={savedNewsIds.includes(item.id)}
+            onSave={onSaveToggle}
+          />
         ))}
       </div>
     );
@@ -103,11 +110,16 @@ const NewsList: React.FC<NewsListProps> = ({
 
   // Grid görünümü (varsayılan)
   return (
-    <div className={`grid ${gridColsClass} gap-6`}>
+    <div className={`grid grid-cols-1 ${gridColsClass} gap-6`}>
       {news.map((item) => (
-        <div key={item.id}>
-          <NewsCard news={item} variant="default" />
-        </div>
+        <NewsCard
+          key={item.id}
+          news={item}
+          variant="default"
+          showSaveButton={showSaveButtons}
+          isSaved={savedNewsIds.includes(item.id)}
+          onSave={onSaveToggle}
+        />
       ))}
     </div>
   );
